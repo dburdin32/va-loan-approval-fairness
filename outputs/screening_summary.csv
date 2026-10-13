@@ -1,0 +1,13 @@
+step,before,after,removed,pct_removed,note
+"Raw download (VA, home purchase, 2025)",617940,617940,0,0.0,as downloaded
+First lien only,617940,617903,37,0.01,lien_status in [1]
+Principal residence only,617903,616862,1041,0.17,occupancy_type in [1]
+Site-built only,616862,599250,17612,2.86,construction_method in [1]
+Single family only,599250,592354,6896,1.15,total_units == 1
+Exclude reverse mortgages,592354,591287,1067,0.18,reverse_mortgage == 2 (no)
+Exclude business purpose,591287,591182,105,0.02,personal purpose only
+Exclude preapproval requests,591182,569964,21218,3.59,"preapproval==2; denied preapprovals are action_taken 7, outside outcome scope"
+Lender decision only,569964,340692,229272,40.23,"kept originated(1)/approved-not-accepted(2)/denied(3); dropped withdrawn, incomplete, purchased, preapproval"
+Income plausibility,340692,339255,1437,0.42,0 < income < $10M (reported in $000s)
+Loan amount plausibility,339255,339244,11,0.0,$10k-$5M
+LTV plausibility,339244,339211,33,0.01,0-150%

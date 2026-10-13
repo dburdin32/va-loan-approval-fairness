@@ -3,10 +3,14 @@
 **M.S. Data Science Capstone (DSCI 7000), Hawaii Pacific University, 2026**
 D'Andre Burdin | Army Signal Corps veteran | VA lending specialist
 
-Using **339,211 VA-guaranteed home purchase applications** from the 2025 national HMDA dataset, this project asks two questions:
+Using **339,211 VA-guaranteed home purchase applications** from the 2025 national HMDA dataset, this project asks four questions:
 
 1. **What actually drives VA loan approval decisions?**
-2. **Do models trained on those decisions treat demographic groups differently, and how much of any gap do underwriting factors explain?**
+2. **Do nonlinear models beat a linear baseline, and what patterns explain the difference?**
+3. **Do models treat demographic groups differently, and how much of any gap do underwriting factors explain?**
+4. **Does the Hawaii market follow national patterns?**
+
+**[View the presentation slides](docs/capstone_presentation.pdf)** | **[Read the full report](docs/capstone_report.pdf)**
 
 ## Key findings
 
@@ -64,6 +68,35 @@ Protected attributes (race, ethnicity, sex) are **never model inputs**; they are
 | Hispanic vs. Not Hispanic | -1.9 pts | -1.1 pts (57%) | -0.8 pts |
 | Female vs. Male | -1.4 pts | -0.9 pts (66%) | -0.5 pts |
 
+### Hawaii (RQ4)
+
+The same analysis run on Hawaii, the author's home market:
+
+| | Hawaii | National |
+|---|---|---|
+| Applications after screening | 2,217 | 339,211 |
+| Approval rate | 92.74% | 91.84% |
+| Denial jump above 60% DTI | +18.1 pts | +28.5 pts |
+| Total denials | 161 | 27,694 |
+
+The DTI pattern replicates in direction. With only 161 denials spread across 19 DTI bins and several demographic groups, group-level fairness metrics could not be estimated reliably, so Hawaii is reported as descriptive corroboration, not an independent fairness audit.
+
+### Independent verification in JMP Pro
+
+The logistic baseline and DTI analysis were rebuilt in JMP Pro from the identical exported dataset, so any discrepancy would reflect method rather than data. JMP ranks DTI as the strongest effect (logworth 2,817.96, more than 3x the next effect), and no parameter reversed sign between the two tools. The DTI curve has the same shape in both: elevated at the low end, flat through the middle, sharp rise above 60%.
+
+<p float="left">
+  <img src="outputs/figures/jmp_effect_summary.png" width="52%" />
+  <img src="outputs/figures/jmp_dti_verification.png" width="44%" />
+</p>
+
+## Practical implications
+
+- **Veterans and their agents:** VA applicants in the 50 to 60% DTI band are denied 7.37% of the time, close to the 5.76% rate at 45%. Guidance calibrated to conventional lending understates their odds.
+- **Lenders and regulators:** fairness audits of VA models need underwriting controls before any disparity is interpreted.
+- **Model developers:** do not assume models calibrated on conventional lending transfer to VA underwriting.
+- **Researchers:** replicate with credit score data, and test whether the 60% discontinuity holds across years.
+
 ## Repository structure
 
 ```
@@ -71,6 +104,7 @@ Protected attributes (race, ethnicity, sex) are **never model inputs**; they are
 ├── outputs/                    # Result tables (CSV)
 │   └── figures/                # ROC, calibration, SHAP, DTI charts
 ├── docs/capstone_report.pdf    # Full written report
+├── docs/capstone_presentation.pdf  # Final presentation slides
 └── data/README.md              # How to download the HMDA source data
 ```
 

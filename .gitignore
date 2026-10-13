@@ -1,0 +1,6 @@
+data/*.csv
+outputs/va_screened_for_jmp.csv
+*.jmp
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
